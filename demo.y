@@ -4,13 +4,14 @@
 #include <string.h>
 %}
 
-%union{
+%union {
     int value;
+    char *str;
 }
 
-%token<value> NUMBER
-%token BOOL_VAL ID
-%type<value> EXP PLUS MINUS MULTIPLY DIVIDE MODULUS GREATER SMALLER EQUAL NUM_OP 
+%token<value> BOOL_VAL NUMBER
+%token<str> ID
+%type<value> EXP NUM_OP LOGICAL_OP PLUS MINUS MULTIPLY DIVIDE MODULUS GREATER SMALLER EQUAL
 
 
 %left '+' '-'
@@ -35,33 +36,30 @@ STMT
 
 PRINT_STMT
     : '(' "print-num" EXP ')'
-        {printf("%s\n" , $3);}
+        { printf("Number: %d\n", $3); }
     | '(' "print-bool" EXP ')'
-        {}
+        { printf("Boolean: %d\n", $3); }
     ;
 
 EXP
     : BOOL_VAL
-    | NUMBER{
-        $$ = $1
-    }
+        { $$ = $1; }
+    | NUMBER
+        { $$ = $1; }
     | VARIABLE
-    | NUM_OP{
-        $$ = $1
-    }
+        { /* Handle variable evaluation */ }
+    | NUM_OP
+        { $$ = $1; }
     | LOGICAL_OP
+        { $$ = $1; }
     | FUN_EXP
     | FUN_CALL
     | IF_EXP
     ;
 
 NUM_OP
-    : PLUS{
-        $$ = $1
-    }
-    | MINUS{
-        $$ = $1
-    }
+    : PLUS
+    | MINUS
     | MULTIPLY
     | DIVIDE
     | MODULUS
@@ -71,17 +69,13 @@ NUM_OP
     ;
 
 PLUS
-    : '(' '+' EXP EXP_LIST ')'
-        {
-           
-        }
+    : '(' '+' EXP_LIST ')'
+        {}
     ;
 
 MINUS
     : '(' '-' EXP EXP ')'
-        {
-            $$ = $3 - $4
-        }
+        {}
     ;
 
 MULTIPLY
@@ -110,7 +104,7 @@ SMALLER
     ;
 
 EQUAL
-    : '(' '=' EXP EXP_LIST ')'
+    : '(' '=' EXP_LIST ')'
         {}
     ;
 
