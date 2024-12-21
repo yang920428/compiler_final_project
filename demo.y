@@ -12,6 +12,7 @@
 %token<value> BOOL_VAL NUMBER
 %token<str> ID
 %type<value> EXP NUM_OP LOGICAL_OP PLUS MINUS MULTIPLY DIVIDE MODULUS GREATER SMALLER EQUAL
+%start PROGRAM
 
 
 %left '+' '-'
@@ -20,7 +21,12 @@
 
 %%
 PROGRAM
-    : STMT*
+    : STMTs
+    ;
+
+STMTs
+    :STMT STMTs
+    |
     ;
 
 STMT
@@ -64,7 +70,7 @@ NUM_OP
     ;
 
 PLUS
-    : '(' '+' EXP EXP+ ')'
+    : '(' '+' EXP EXPs ')'
         {}
     ;
 
@@ -74,7 +80,7 @@ MINUS
     ;
 
 MULTIPLY
-    : '(' '*' EXP EXP+ ')'
+    : '(' '*' EXP EXPs ')'
         {}
     ;
 
@@ -99,7 +105,7 @@ SMALLER
     ;
 
 EQUAL
-    : '(' '=' EXP EXP+ ')'
+    : '(' '=' EXP EXPs ')'
         {}
     ;
 
@@ -110,12 +116,12 @@ LOGICAL_OP
     ;
 
 AND_OP
-    : '(' "and" EXP EXP+ ')'
+    : '(' "and" EXP EXPs ')'
         {}
     ;
 
 OR_OP
-    : '(' "or" EXP EXP+ ')'
+    : '(' "or" EXP EXPs ')'
         {}
     ;
 
@@ -139,7 +145,7 @@ FUN_EXP
     ;
 
 FUN_IDS
-    : '(' ID* ')'
+    : '(' IDs ')'
     ;
 
 FUN_BODY
@@ -147,8 +153,8 @@ FUN_BODY
     ;
 
 FUN_CALL
-    : '(' FUN_EXP PARAM* ')'
-    | '(' FUN_NAME PARAM* ')'
+    : '(' FUN_EXP PARAMs ')'
+    | '(' FUN_NAME PARAMs ')'
     ;
 
 
@@ -175,6 +181,21 @@ THEN_EXP
 
 ELSE_EXP
     : EXP
+    ;
+
+EXPs
+    :EXP EXPs
+    |
+    ;
+
+IDs
+    :ID IDs
+    |
+    ;
+
+PARAMs
+    :PARAM PARAMs
+    |
     ;
 
 
