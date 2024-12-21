@@ -10,194 +10,103 @@
 }
 
 %token<value> BOOL_VAL NUMBER
-%token<str> ID
-%type<value> EXP NUM_OP LOGICAL_OP PLUS MINUS MULTIPLY DIVIDE MODULUS GREATER SMALLER EQUAL
-%start PROGRAM
-
 
 %left '+' '-'
 %left '*' '/'
 %left '<' '>' '='
 
 %%
+
 PROGRAM
     : STMTs
     ;
 
 STMTs
-    :STMT STMTs
-    |
+    : STMT STMTs {  }
+    | {  }
     ;
 
 STMT
-    : EXP
-    | DEF_STMT
-    | PRINT_STMT
+    : EXP {  }
+    | DEF_STMT {  }
+    | PRINT_STMT {  }
     ;
 
 PRINT_STMT
-    : '(' "print-num" EXP ')'
-        { printf("Number: %d\n", $3); }
-    | '(' "print-bool" EXP ')'
-        { printf("Boolean: %d\n", $3); }
+    : '(' "print-num" EXP ')' { printf("Number: %d\n", $3); }
+    | '(' "print-bool" EXP ')' { printf("Boolean: %d\n", $3); }
     ;
 
 EXP
-    : BOOL_VAL
-        { $$ = $1; }
-    | NUMBER
-        { $$ = $1; }
-    | VARIABLE
-        { /* Handle variable evaluation */ }
-    | NUM_OP
-        { $$ = $1; }
-    | LOGICAL_OP
-        { $$ = $1; }
-    | FUN_EXP
-    | FUN_CALL
-    | IF_EXP
-    ;
-
-NUM_OP
-    : PLUS
-    | MINUS
-    | MULTIPLY
-    | DIVIDE
-    | MODULUS
-    | GREATER
-    | SMALLER
-    | EQUAL
-    ;
-
-PLUS
-    : '(' '+' EXP EXPs ')'
-        {}
-    ;
-
-MINUS
-    : '(' '-' EXP EXP ')'
-        {}
-    ;
-
-MULTIPLY
-    : '(' '*' EXP EXPs ')'
-        {}
-    ;
-
-DIVIDE
-    : '(' '/' EXP EXP ')'
-        {}
-    ;
-
-MODULUS
-    : '(' "mod" EXP EXP ')'
-        {}
-    ;
-
-GREATER
-    : '(' '>' EXP EXP ')'
-        {}
-    ;
-
-SMALLER
-    : '(' '<' EXP EXP ')'
-        {}
-    ;
-
-EQUAL
-    : '(' '=' EXP EXPs ')'
-        {}
-    ;
-
-LOGICAL_OP
-    : AND_OP
-    | OR_OP
-    | NOT_OP
-    ;
-
-AND_OP
-    : '(' "and" EXP EXPs ')'
-        {}
-    ;
-
-OR_OP
-    : '(' "or" EXP EXPs ')'
-        {}
-    ;
-
-NOT_OP
-    : '(' "not" EXP ')'
-        {}
+    : BOOL_VAL {  }
+    | NUMBER { }
+    | VARIABLE {  }
+    | NUM_OP {  }
+    | LOGICAL_OP {  }
+    | FUN_EXP {  }
+    | FUN_CALL {  }
+    | IF_EXP { }
     ;
 
 DEF_STMT
-    : '(' "define" ID EXP ')'
-        {}
+    : '(' "define" ID EXP ')' {  }
     ;
 
 VARIABLE
-    : ID
+    : ID { }
     ;
 
 FUN_EXP
-    : '(' "fun" FUN_IDS FUN_BODY ')'
-        {}
+    : '(' "fun" FUN_IDS FUN_BODY ')' { }
     ;
 
 FUN_IDS
-    : '(' IDs ')'
+    : '(' IDs ')' {  }
     ;
 
 FUN_BODY
-    : EXP
+    : EXP {  }
     ;
 
 FUN_CALL
-    : '(' FUN_EXP PARAMs ')'
-    | '(' FUN_NAME PARAMs ')'
+    : '(' FUN_EXP PARAMs ')' {  }
+    | '(' FUN_NAME PARAMs ')' {  }
     ;
-
 
 PARAM
-    : EXP
-    ;
-
-FUN_NAME
-    : ID
-    ;
-
-IF_EXP
-    : '(' "if" TEST_EXP THEN_EXP ELSE_EXP ')'
-        {}
-    ;
-
-TEST_EXP
-    : EXP
-    ;
-
-THEN_EXP
-    : EXP
-    ;
-
-ELSE_EXP
-    : EXP
-    ;
-
-EXPs
-    :EXP EXPs
-    |
-    ;
-
-IDs
-    :ID IDs
-    |
+    : EXP {  }
     ;
 
 PARAMs
-    :PARAM PARAMs
-    |
+    : PARAM PARAMs { }
+    | {  }
     ;
 
+IF_EXP
+    : '(' "if" TEST_EXP THEN_EXP ELSE_EXP ')' {  }
+    ;
+
+TEST_EXP
+    : EXP {  }
+    ;
+
+THEN_EXP
+    : EXP { }
+    ;
+
+ELSE_EXP
+    : EXP { }
+    ;
+
+EXPs
+    : EXP EXPs {  }
+    | {  }
+    ;
+
+IDs
+    : ID IDs {  }
+    | {  }
+    ;
 
 %%
 
