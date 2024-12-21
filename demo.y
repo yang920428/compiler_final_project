@@ -20,12 +20,7 @@
 
 %%
 PROGRAM
-    : STMT_LIST
-    ;
-
-STMT_LIST
-    : STMT
-    | STMT_LIST STMT
+    : STMT*
     ;
 
 STMT
@@ -69,7 +64,7 @@ NUM_OP
     ;
 
 PLUS
-    : '(' '+' EXP_LIST ')'
+    : '(' '+' EXP EXP+ ')'
         {}
     ;
 
@@ -79,7 +74,7 @@ MINUS
     ;
 
 MULTIPLY
-    : '(' '*' EXP_LIST ')'
+    : '(' '*' EXP EXP+ ')'
         {}
     ;
 
@@ -104,7 +99,7 @@ SMALLER
     ;
 
 EQUAL
-    : '(' '=' EXP_LIST ')'
+    : '(' '=' EXP EXP+ ')'
         {}
     ;
 
@@ -115,12 +110,12 @@ LOGICAL_OP
     ;
 
 AND_OP
-    : '(' "and" EXP_LIST ')'
+    : '(' "and" EXP EXP+ ')'
         {}
     ;
 
 OR_OP
-    : '(' "or" EXP_LIST ')'
+    : '(' "or" EXP EXP+ ')'
         {}
     ;
 
@@ -144,7 +139,7 @@ FUN_EXP
     ;
 
 FUN_IDS
-    : '(' ID_LIST ')'
+    : '(' ID* ')'
     ;
 
 FUN_BODY
@@ -152,14 +147,10 @@ FUN_BODY
     ;
 
 FUN_CALL
-    : '(' FUN_EXP PARAM_LIST ')'
-    | '(' FUN_NAME PARAM_LIST ')'
+    : '(' FUN_EXP PARAM* ')'
+    | '(' FUN_NAME PARAM* ')'
     ;
 
-PARAM_LIST
-    : /* empty */
-    | PARAM_LIST PARAM
-    ;
 
 PARAM
     : EXP
@@ -186,15 +177,6 @@ ELSE_EXP
     : EXP
     ;
 
-EXP_LIST
-    : EXP
-    | EXP_LIST EXP
-    ;
-
-ID_LIST
-    : /* empty */
-    | ID_LIST ID
-    ;
 
 %%
 
