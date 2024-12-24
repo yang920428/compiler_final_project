@@ -2,14 +2,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+typedef struct {
+    int val;
+    int num;
+    int Bool;
+    char name[32];
+}info;
+
 %}
 
 %union {
-    int value;
-    char *str;
+    int num;
+    int val;
+    int Bool;
+    char name[32];
+    info information;
 }
 
-%token<value> BOOL_VAL NUMBER
+%token<information> EXP STMT
+%token<num> Number NUM_OP
+%token<Bool> BOOL_VAL LOGICAL_OP IF_EXP
+%token<name> VARIABLE
+%token<val> FUN_EXP FUN_CALL
 
 %left '+' '-'
 %left '*' '/'
@@ -32,10 +47,14 @@ STMT
     | PRINT_STMT {  }
     ;
 
+// print
+
 PRINT_STMT
     : '(' "print-num" EXP ')' { printf("Number: %d\n", $3); }
     | '(' "print-bool" EXP ')' { printf("Boolean: %d\n", $3); }
     ;
+
+//exp 
 
 EXP
     : BOOL_VAL {  }
@@ -48,6 +67,73 @@ EXP
     | IF_EXP { }
     ;
 
+// num op
+
+NUM_OP
+    : PLUS
+    | MINUS
+    | MULTIPLY
+    | DIVIDE
+    | MODULUS
+    | GREATER
+    | SMALLER
+    | EQUAL
+    ;
+
+PLUS
+    : '(' '+' EXP EXPs ')'
+        {}
+    ;
+
+MINUS
+    : '(' '-' EXP EXP ')' {}
+    ;
+
+MULTIPLY
+    : '(' '*' EXP EXPs ')'
+        {}
+    ;
+
+DIVIDE
+    : '(' '/' EXP EXP ')' {}
+    ;
+
+MODULUS
+    : '(' 'mod' EXP EXP ')' {}
+    ;
+
+
+
+EQUAL
+    : '(' '=' EXP EXPs ')'
+        {}
+    ;
+
+// logical op
+
+LOGICAL_OP
+    : AND_OP {}
+    | OR_OP {}
+    | NOT_OP {}
+    ;
+
+
+AND_OP
+    : '(' "and" EXP EXPs ')'
+        {}
+    ;
+
+OR_OP
+    : '(' "or" EXP EXPs ')'
+        {}
+    ;
+
+NOT_OP 
+    : '(' 'not' EXP ')' {}
+    ;
+
+// def stmt
+
 DEF_STMT
     : '(' "define" ID EXP ')' {  }
     ;
@@ -55,6 +141,8 @@ DEF_STMT
 VARIABLE
     : ID { }
     ;
+
+// function
 
 FUN_EXP
     : '(' "fun" FUN_IDS FUN_BODY ')' { }
@@ -82,8 +170,11 @@ PARAMs
     | {  }
     ;
 
+// if 
+
 IF_EXP
-    : '(' "if" TEST_EXP THEN_EXP ELSE_EXP ')' {  }
+    : '(' "if" TEST_EXP THEN_EXP ELSE_EXP ')' { 
+     }
     ;
 
 TEST_EXP
@@ -97,6 +188,8 @@ THEN_EXP
 ELSE_EXP
     : EXP { }
     ;
+
+// other
 
 EXPs
     : EXP EXPs {  }
@@ -116,5 +209,5 @@ int main() {
 }
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    printf("syntax error");
 }
